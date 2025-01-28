@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+    <div class="container">
+    <form>
+        
+        <h1>To-do List </h1>
+       <div class="border-style">
+   
+        <div class="input-area">
+            <input type="text" value="" class="todovalue" placeholder="Add Something ....">
+            <button class="btn"> ADD </button> 
+            </div>
+
+        <div class="todolists">
+ </div>
+       </div>
+    
+    </form>
+</div>
+<script>
+    const todolists =  document.querySelector(".todolists");
+    const listvalue =  document.querySelector(".todovalue");
+
+
+    let todolistvalue =[];
+
+
+
+const gettodolistfromlocalLs = () =>{
+    return JSON.parse(localStorage.getItem("todoval")) || [];
+};
+
+
+
+
+//CREATING LOCAL STORAGE
+const addTodoListLocalStorage =(todo) =>{
+    return localStorage.setItem("todoval" , JSON.stringify(todo));
+};
+
+
+
+const showtodolist = () => {
+
+    todolistvalue = gettodolistfromlocalLs();
+todolistvalue.forEach((currenttodo)=>{
+    const liElement = document.createElement("li");
+liElement.innerHTML = currenttodo; 
+todolists.append(liElement);
+
+});
+};
+
+const removetodolist = (e) => {
+console.log(e.target.textContent);
+let currenttodo = e.target;
+updatedtodolist = todolistvalue.filter(
+    (currenttodovalue) => currenttodovalue !== currenttodo.textContent);
+
+    addTodoListLocalStorage(updatedtodolist);
+currenttodo.remove();
+
+};
+    const addTodoList = (e) => {
+        e.preventDefault();
+    
+   
+
+        todolistvalue =gettodolistfromlocalLs();
+       let newtodo= listvalue.value.trim();//.trim removes whitespace from both sides of a string
+
+
+       listvalue.value = "";//to empty space after we add a item
+
+
+        if(newtodo.length !==0 && !todolistvalue.includes(newtodo)){
+
+
+            todolistvalue.push(newtodo);
+
+
+            addTodoListLocalStorage(todolistvalue);
+    
+
+
+            const liElement = document.createElement("li");
+liElement.innerHTML = newtodo; 
+todolists.append(liElement);
+
+};
+        }
+
+  showtodolist();  
+    
+    document.querySelector(".btn").addEventListener("click" , (e)=>{
+        addTodoList(e);
+    });
+
+
+
+ todolists.addEventListener('click', (e) => removetodolist(e));
+</script>
+
+</body>
+</html>
